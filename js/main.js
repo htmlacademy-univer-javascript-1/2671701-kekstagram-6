@@ -1,1 +1,1 @@
-import {getImageDescription} from '/js/data.js';
+import { getImageDescription } from './js/generate.js';

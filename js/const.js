@@ -42,4 +42,4 @@ const DISCRIPTION = [
   'Старый велосипед у кирпичной стены.',
   'Смеющийся ребёнок с воздушным змеем.'
 ]
-export {MASSAGE, NAMES, DISCRIPTION};
+export { MASSAGE, NAMES, DISCRIPTION };

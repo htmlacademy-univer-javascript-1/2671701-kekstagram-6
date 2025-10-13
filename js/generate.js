@@ -1,5 +1,5 @@
-import {createRandomIdFromRangeGenerator, getRandomInteger} from '/js/util.js';
-import {MASSAGE, NAMES, DISCRIPTION} from '/js/const.js';
+import { createRandomIdFromRangeGenerator, getRandomInteger } from './js/utils.js';
+import { MASSAGE, NAMES, DISCRIPTION } from './js/const.js';
 
 const createRandomIdMsg = createRandomIdFromRangeGenerator(1, 1000);
 const createRandomId = createRandomIdFromRangeGenerator(1, 25);
@@ -27,4 +27,4 @@ const getImageDescription = () => {
   };
 };
 
-export {getImageDescription};
+export { getImageDescription };
