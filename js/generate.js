@@ -1,5 +1,5 @@
-import { createRandomIdFromRangeGenerator, getRandomInteger } from './js/utils.js';
-import { MASSAGE, NAMES, DISCRIPTION } from './js/const.js';
+import { createRandomIdFromRangeGenerator, getRandomInteger } from './utils.js';
+import { MASSAGE, NAMES, DISCRIPTION } from './const.js';
 
 const createRandomIdMsg = createRandomIdFromRangeGenerator(1, 1000);
 const createRandomId = createRandomIdFromRangeGenerator(1, 25);
@@ -17,14 +17,15 @@ const getComments = () => {
   };
 };
 
-const getImageDescription = () => {
-  return {
-    id: createRandomId(),
-    url: `photos/${createRandomUrl()}.jpg`,
-    description: DISCRIPTION[getRandomInteger(0, DISCRIPTION.length -1)],
-    likes: getRandomInteger(15, 200),
-    comments: Array.from({length: getRandomInteger(0, 30)}, getComments),
-  };
-};
+const getImageDescription = () => ({
+  id: createRandomId(),
+  url: `photos/${createRandomUrl()}.jpg`,
+  description: DISCRIPTION[getRandomInteger(0, DISCRIPTION.length - 1)],
+  likes: getRandomInteger(15, 200),
+  comments: Array.from({ length: getRandomInteger(0, 30) }, getComments)
+});
 
-export { getImageDescription };
+const createPhotos = (count) =>
+  Array.from({ length: count }, getImageDescription);
+
+export { createPhotos };
