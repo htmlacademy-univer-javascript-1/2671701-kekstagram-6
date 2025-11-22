@@ -17,15 +17,13 @@ const getComments = () => {
   };
 };
 
-const getImageDescription = () => {
-  return {
-    id: createRandomId(),
-    url: `photos/${createRandomUrl()}.jpg`,
-    description: DISCRIPTION[getRandomInteger(0, DISCRIPTION.length -1)],
-    likes: getRandomInteger(15, 200),
-    comments: Array.from({length: getRandomInteger(0, 30)}, getComments),
-  };
-};
+const getImageDescription = () => ({
+  id: createRandomId(),
+  url: `photos/${createRandomUrl()}.jpg`,
+  description: DISCRIPTION[getRandomInteger(0, DISCRIPTION.length - 1)],
+  likes: getRandomInteger(15, 200),
+  comments: Array.from({ length: getRandomInteger(0, 30) }, getComments)
+});
 
 const createPhotos = (count) =>
   Array.from({ length: count }, getImageDescription);
