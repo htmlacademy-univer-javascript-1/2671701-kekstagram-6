@@ -9,9 +9,15 @@ const caption = bigPicture.querySelector('.social__caption');
 
 const commentsCounterBlock = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
-
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 
+const COMMENTS_PER_PORTION = 5;
+
+// Храним состояние текущего изображения
+let allComments = [];
+let renderedCount = 0;
+
+// Создание одного комментария
 function createComment({ avatar, name, message }) {
   const li = document.createElement('li');
   li.classList.add('social__comment');
@@ -31,17 +37,50 @@ function createComment({ avatar, name, message }) {
   return li;
 }
 
+// Рисуем ещё порцию комментариев
+function renderNextComments() {
+  const nextChunk = allComments.slice(renderedCount, renderedCount + COMMENTS_PER_PORTION);
+
+  nextChunk.forEach((comment) => {
+    commentsList.append(createComment(comment));
+  });
+
+  renderedCount += nextChunk.length;
+
+  updateCounter();
+
+  // Если комментарии закончились — прячем кнопку
+  if (renderedCount >= allComments.length) {
+    commentsLoader.classList.add('hidden');
+  }
+}
+
+function updateCounter() {
+  commentsCounterBlock.textContent = `${renderedCount} из ${allComments.length} комментариев`;
+}
+
 export function openBigPicture(photo) {
+  // Заполняем данные
   imgElement.src = photo.url;
   likesCount.textContent = photo.likes;
   commentsCount.textContent = photo.comments.length;
   caption.textContent = photo.description;
+
+  // Сохраняем комментарии
+  allComments = photo.comments;
+  renderedCount = 0;
+
+  // Подготовка списка
   commentsList.innerHTML = '';
-  photo.comments.forEach((comment) => {
-    commentsList.append(createComment(comment));
-  });
-  commentsCounterBlock.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+
+  // Показываем элементы UI
+  commentsCounterBlock.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
+
+  // Рисуем первую порцию
+  renderNextComments();
+
+  // Открываем окно
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
 
@@ -61,4 +100,10 @@ function onEscKey(evt) {
   }
 }
 
+// Нажатие «Загрузить ещё»
+commentsLoader.addEventListener('click', () => {
+  renderNextComments();
+});
+
+// Нажатие на крестик
 closeButton.addEventListener('click', closeBigPicture);
