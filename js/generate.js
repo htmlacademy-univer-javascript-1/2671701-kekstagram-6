@@ -11,7 +11,7 @@ const getComments = () => {
 
   return {
     id: createRandomIdMsg(),
-    avatar: `mg/avatar-${getRandomInteger(1, 6)}.svg`,
+    avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
     message: MASSAGE[randomeMassageIndex],
     name: NAMES[randomNameIndex],
   };

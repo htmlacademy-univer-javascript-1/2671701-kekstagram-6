@@ -1,3 +1,5 @@
+import { openBigPicture } from './fullsize.js';
+
 export const renderPictures = (photos) => {
   const template = document
     .querySelector('#picture')
@@ -7,7 +9,9 @@ export const renderPictures = (photos) => {
   const container = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
-  photos.forEach(({ url, description, likes, comments }) => {
+  photos.forEach((photo) => {
+    const { url, description, likes, comments } = photo;
+
     const node = template.cloneNode(true);
 
     const img = node.querySelector('.picture__img');
@@ -16,6 +20,9 @@ export const renderPictures = (photos) => {
 
     node.querySelector('.picture__likes').textContent = likes;
     node.querySelector('.picture__comments').textContent = comments.length;
+    node.addEventListener('click', () => {
+      openBigPicture(photo);
+    });
 
     fragment.appendChild(node);
   });
