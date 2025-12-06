@@ -52,10 +52,11 @@ const checkMeetingsAndWorkTime = (StartDay, EndDay, MeetingStart, MeetingTime) =
   if (EndDay.split(':')[0] > EndMeetingTime.hour) {
     return true;
   }
-  if (EndDay.split(':')[0] == EndMeetingTime.hour) {
+  if (EndDay.split(':')[0] === EndMeetingTime.hour) {
     if (EndDay.split(':')[1] >= EndMeetingTime.minute) {
       return true;
     }
   }
   return false;
 };
+export { checkMeetingsAndWorkTime };
