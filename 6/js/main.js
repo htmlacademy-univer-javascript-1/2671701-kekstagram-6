@@ -43,7 +43,6 @@ const createRandomIdFromRangeGenerator = (min, max) => {
   return function () {
     let currentValue = getRandomInteger(min, max);
     if (previousValues.length >= (max - min + 1)) {
-      console.error('Перебраны все числа из диапазона от ' + min + ' до ' + max);
       return null;
     }
     while (previousValues.includes(currentValue)) {
@@ -70,14 +69,12 @@ const getComments = () => {
   };
 };
 
-const getImageDescription = () => {
-  return {
-    id: createRandomId(),
-    url: `photos/${createRandomUrl()}.jpg`,
-    description: 'Описание',
-    likes: getRandomInteger(15, 200),
-    comments: Array.from({length: getRandomInteger(0, 30)}, getComments),
-  };
-};
+const getImageDescription = () => ({
+  id: createRandomId(),
+  url: `photos/${createRandomUrl()}.jpg`,
+  description: 'Описание',
+  likes: getRandomInteger(15, 200),
+  comments: Array.from({length: getRandomInteger(0, 30)}, getComments),
+});
 
-console.log(getImageDescription());
+export { getImageDescription };
