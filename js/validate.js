@@ -11,10 +11,9 @@ function validate(imageUploadForm) {
     errorTextParent: 'img-upload__field-wrapper',
   });
 
-  // ---------- Проверка хэштегов ----------
   function validateHashtags(hashtagsString) {
     if (hashtagsString.trim() === '') {
-      return true; // пусто — значит ок
+      return true;
     }
 
     const hashtags = hashtagsString
@@ -22,7 +21,6 @@ function validate(imageUploadForm) {
       .split(/\s+/)
       .filter((hashtag) => hashtag !== '');
 
-    // Количество
     if (hashtags.length > MAX_HASHTAGS) {
       return false;
     }
@@ -30,14 +28,12 @@ function validate(imageUploadForm) {
     const seenHashtags = new Set();
 
     for (const hashtag of hashtags) {
-      // Проверка формата
       if (!hashtagReg.test(hashtag)) {
         return false;
       }
 
       const lowerHashtag = hashtag.toLowerCase();
 
-      // Проверка дубликатов
       if (seenHashtags.has(lowerHashtag)) {
         return false;
       }
@@ -48,12 +44,10 @@ function validate(imageUploadForm) {
     return true;
   }
 
-  // ---------- Проверка комментария ----------
   function validateComment(commentString) {
     return commentString.length <= 140;
   }
 
-  // Регистрируем валидаторы
   pristine.addValidator(
     hashtagField,
     validateHashtags,
