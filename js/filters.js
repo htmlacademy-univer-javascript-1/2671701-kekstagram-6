@@ -1,20 +1,21 @@
 import { debounce } from './utils.js';
 
 const FILTER_RANDOM_COUNT = 10;
+const RERENDER_DELAY = 500;
 
-const filtersContainer = document.querySelector('.img-filters');
-const filtersForm = document.querySelector('.img-filters__form');
-const picturesContainer = document.querySelector('.pictures');
+const filtersContainerElement = document.querySelector('.img-filters');
+const filtersFormElement = document.querySelector('.img-filters__form');
+const picturesContainerElement = document.querySelector('.pictures');
 
 const clearPictures = () => {
-  picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
+  picturesContainerElement.querySelectorAll('.picture').forEach((picture) => picture.remove());
 };
 
 const setActiveButton = (buttonId) => {
-  filtersForm.querySelectorAll('.img-filters__button').forEach((btn) => {
+  filtersFormElement.querySelectorAll('.img-filters__button').forEach((btn) => {
     btn.classList.remove('img-filters__button--active');
   });
-  filtersForm.querySelector(`#${buttonId}`).classList.add('img-filters__button--active');
+  filtersFormElement.querySelector(`#${buttonId}`).classList.add('img-filters__button--active');
 };
 
 const getRandomUnique = (photos, count) => {
@@ -30,16 +31,16 @@ const getDiscussed = (photos) =>
   photos.slice().sort((a, b) => b.comments.length - a.comments.length);
 
 const getFilters = (photos, renderPictures) => {
-  filtersContainer.classList.remove('img-filters--inactive');
+  filtersContainerElement.classList.remove('img-filters--inactive');
 
   const renderWithClear = (list) => {
     clearPictures();
     renderPictures(list);
   };
 
-  const debouncedRender = debounce(renderWithClear, 500);
+  const debouncedRender = debounce(renderWithClear, RERENDER_DELAY);
 
-  filtersForm.addEventListener('click', (evt) => {
+  filtersFormElement.addEventListener('click', (evt) => {
     const button = evt.target.closest('.img-filters__button');
     if (!button) {
       return;

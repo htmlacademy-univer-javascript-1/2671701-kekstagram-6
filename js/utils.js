@@ -1,4 +1,12 @@
+const SHOW_ERROR_TIME = 10;
+const DEFAULT_DEBOUNCE_DELAY = 500;
+
 const showLoadError = (message) => {
+  const old = document.querySelector('.load-error');
+  if (old) {
+    old.remove();
+  }
+
   const errorBlock = document.createElement('div');
   errorBlock.classList.add('load-error');
   errorBlock.textContent = message;
@@ -13,10 +21,13 @@ const showLoadError = (message) => {
     font-size: 18px;
     z-index: 1000;
   `;
+
   document.body.append(errorBlock);
+
+  setTimeout(() => errorBlock.remove(), SHOW_ERROR_TIME);
 };
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay = DEFAULT_DEBOUNCE_DELAY) => {
   let timeoutId;
 
   return (...rest) => {

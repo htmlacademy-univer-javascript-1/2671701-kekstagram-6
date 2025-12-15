@@ -1,42 +1,43 @@
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const STEP = 25;
+const PERCENT_DIVIDER = 100;
 
-const smallerButton = document.querySelector('.scale__control--smaller');
-const biggerButton = document.querySelector('.scale__control--bigger');
-const scaleValueField = document.querySelector('.scale__control--value');
-const previewImage = document.querySelector('.img-upload__preview img');
+const smallerButtonElement = document.querySelector('.scale__control--smaller');
+const biggerButtonElement = document.querySelector('.scale__control--bigger');
+const scaleValueFieldElement = document.querySelector('.scale__control--value');
+const previewImageElement = document.querySelector('.img-upload__preview img');
 
 let currentScale = MAX_SCALE;
 
-function applyScale() {
-  scaleValueField.value = `${currentScale}%`;
-  previewImage.style.transform = `scale(${currentScale / 100})`;
-}
+const applyScale = () => {
+  scaleValueFieldElement.value = `${currentScale}%`;
+  previewImageElement.style.transform = `scale(${currentScale / PERCENT_DIVIDER})`;
+};
 
-function onSmallerClick() {
+const onSmallerClick = () => {
   if (currentScale > MIN_SCALE) {
     currentScale -= STEP;
     applyScale();
   }
-}
+};
 
-function onBiggerClick() {
+const onBiggerClick = () => {
   if (currentScale < MAX_SCALE) {
     currentScale += STEP;
     applyScale();
   }
-}
+};
 
-function initScale() {
+const initScale = () => {
   applyScale();
-  smallerButton.addEventListener('click', onSmallerClick);
-  biggerButton.addEventListener('click', onBiggerClick);
-}
+  smallerButtonElement.addEventListener('click', onSmallerClick);
+  biggerButtonElement.addEventListener('click', onBiggerClick);
+};
 
-function resetScale() {
+const resetScale = () => {
   currentScale = MAX_SCALE;
   applyScale();
-}
+};
 
 export { initScale, resetScale };

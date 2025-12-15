@@ -1,8 +1,8 @@
-const effectLevelSlider = document.querySelector('.effect-level__slider');
-const effectLevelValue = document.querySelector('.effect-level__value');
-const effectsContainer = document.querySelector('.effects');
-const previewImage = document.querySelector('.img-upload__preview img');
-const effectLevelWrapper = document.querySelector('.img-upload__effect-level');
+const effectLevelSliderElement = document.querySelector('.effect-level__slider');
+const effectLevelValueElement = document.querySelector('.effect-level__value');
+const effectsContainerElement = document.querySelector('.effects');
+const previewImageElement = document.querySelector('.img-upload__preview img');
+const effectLevelWrapperElement = document.querySelector('.img-upload__effect-level');
 
 const EFFECTS = {
   none: {
@@ -37,44 +37,44 @@ const EFFECTS = {
 
 let currentEffect = 'none';
 
-function updateSlider(effect) {
+const updateSlider = (effect) => {
   const { min, max, step } = EFFECTS[effect];
 
-  effectLevelSlider.noUiSlider.updateOptions({
+  effectLevelSliderElement.noUiSlider.updateOptions({
     range: { min, max },
     start: max,
     step
   });
 
-  effectLevelValue.value = max;
-}
+  effectLevelValueElement.value = max;
+};
 
-function applyEffect(value) {
+const applyEffect = (value) => {
   const effect = EFFECTS[currentEffect];
-  previewImage.style.filter = effect.apply(value);
-}
+  previewImageElement.style.filter = effect.apply(value);
+};
 
-function initEffects() {
-  noUiSlider.create(effectLevelSlider, {
+const initEffects = () => {
+  noUiSlider.create(effectLevelSliderElement, {
     range: { min: 0, max: 100 },
     start: 100,
     step: 1,
     connect: 'lower'
   });
 
-  effectLevelSlider.noUiSlider.on('update', (values) => {
+  effectLevelSliderElement.noUiSlider.on('update', (values) => {
     const value = values[0];
-    effectLevelValue.value = value;
+    effectLevelValueElement.value = value;
 
     if (currentEffect === 'none') {
-      previewImage.style.filter = '';
+      previewImageElement.style.filter = '';
       return;
     }
 
     applyEffect(value);
   });
 
-  effectsContainer.addEventListener('change', (evt) => {
+  effectsContainerElement.addEventListener('change', (evt) => {
     if (!evt.target.classList.contains('effects__radio')) {
       return;
     }
@@ -82,23 +82,23 @@ function initEffects() {
     currentEffect = evt.target.value;
 
     if (currentEffect === 'none') {
-      effectLevelWrapper.classList.add('hidden');
-      previewImage.style.filter = '';
+      effectLevelWrapperElement.classList.add('hidden');
+      previewImageElement.style.filter = '';
     } else {
-      effectLevelWrapper.classList.remove('hidden');
+      effectLevelWrapperElement.classList.remove('hidden');
       updateSlider(currentEffect);
     }
   });
 
-  effectLevelWrapper.classList.add('hidden');
-}
+  effectLevelWrapperElement.classList.add('hidden');
+};
 
-function resetEffects() {
+const resetEffects = () => {
   currentEffect = 'none';
-  effectLevelWrapper.classList.add('hidden');
-  previewImage.style.filter = '';
-  effectLevelValue.value = 100;
-  effectLevelSlider.noUiSlider.set(100);
-}
+  effectLevelWrapperElement.classList.add('hidden');
+  previewImageElement.style.filter = '';
+  effectLevelValueElement.value = 100;
+  effectLevelSliderElement.noUiSlider.set(100);
+};
 
 export { initEffects, resetEffects };
