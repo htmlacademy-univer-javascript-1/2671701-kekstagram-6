@@ -1,25 +1,39 @@
-const SERVER_URL = 'https://29.javascript.htmlacademy.pro/kekstagram';
-const DATA_URL = `${SERVER_URL}/data`;
+const REQUEST_TIMEOUT = 10000;
 
-const getPhotos = () =>
-  fetch(DATA_URL)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Ошибка загрузки: ${response.status}`);
+const getBaseUrl = () => document.querySelector('meta[name="baseUrl"]').content;
+
+const buildUrl = (baseUrl, path) => `${baseUrl.replace(/\/$/, '')}${path}`;
+
+const request = (method, url, body = null) =>
+  new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    xhr.timeout = REQUEST_TIMEOUT;
+
+    xhr.addEventListener('load', () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(xhr.response);
+        return;
       }
-      return response.json();
+      reject(new Error(`Ошибка ${method}: ${xhr.status} ${xhr.statusText}`));
     });
 
-const sendFormData = (formData) =>
-  fetch(SERVER_URL, {
-    method: 'POST',
-    body: formData,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Ошибка отправки: ${response.status}`);
-      }
-      return response.json();
-    });
+    xhr.addEventListener('error', () => reject(new Error(`Ошибка ${method}: соединение не установлено`)));
+    xhr.addEventListener('timeout', () => reject(new Error(`Ошибка ${method}: таймаут ${REQUEST_TIMEOUT}мс`)));
+
+    xhr.open(method, url);
+    xhr.send(body);
+  });
+
+const getPhotos = () => {
+  const baseUrl = getBaseUrl();
+  return request('GET', buildUrl(baseUrl, '/data'));
+};
+
+const sendFormData = (formData) => {
+  const baseUrl = getBaseUrl();
+  // ВАЖНО: тест ждёт POST на baseApiUrl + '/'
+  return request('POST', `${baseUrl.replace(/\/$/, '')}/`, formData);
+};
 
 export { getPhotos, sendFormData };

@@ -64,7 +64,7 @@ const initEffects = () => {
 
   effectLevelSliderElement.noUiSlider.on('update', (values) => {
     const value = values[0];
-    effectLevelValueElement.value = value;
+    effectLevelValueElement.value = String(parseFloat(value));
 
     if (currentEffect === 'none') {
       previewImageElement.style.filter = '';

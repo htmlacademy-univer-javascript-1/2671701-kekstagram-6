@@ -39,14 +39,16 @@ const uploadImage = () => {
   };
 
   const updateSubmitButton = () => {
-    if (!pristine) {
-      return;
-    }
-    submitButtonElement.disabled = !pristine.validate();
+    const isValid = pristine.validate(true);
+    submitButtonElement.disabled = !isValid;
   };
 
   const closePhoto = () => {
     imageUploadOverlayElement.classList.add(HIDDEN_CLASS);
+    imageUploadFormElement.querySelectorAll('.pristine-error').forEach((errorElement) => {
+      errorElement.remove();
+    });
+
     document.body.classList.remove(MODAL_OPEN_CLASS);
     document.removeEventListener('keydown', onDocumentKeydown);
 

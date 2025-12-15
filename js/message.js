@@ -1,5 +1,9 @@
 const ESC_KEY = 'Escape';
 
+let isOpen = false;
+
+const isMessageOpen = () => isOpen;
+
 const showMessage = (templateId, rootClass, innerClass, buttonClass) => {
   const messageTemplateFragment = document
     .querySelector(templateId)
@@ -8,12 +12,22 @@ const showMessage = (templateId, rootClass, innerClass, buttonClass) => {
 
   const messageElement = messageTemplateFragment.querySelector(`.${rootClass}`);
   document.body.append(messageElement);
+  isOpen = true;
 
-  const onDocumentKeydown = (evt) => {
+  const closeMessage = () => {
+    document.removeEventListener('keydown', onDocumentKeydown, true);
+    messageElement.remove();
+    isOpen = false;
+  };
+
+  function onDocumentKeydown (evt) {
     if (evt.key === ESC_KEY) {
+      // ✅ не даём событию дойти до обработчика Esc формы
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
       closeMessage();
     }
-  };
+  }
 
   const onMessageElementClick = (evt) => {
     const isClickOutsideInner = !evt.target.closest(`.${innerClass}`);
@@ -24,13 +38,9 @@ const showMessage = (templateId, rootClass, innerClass, buttonClass) => {
     }
   };
 
-  function closeMessage () {
-    document.removeEventListener('keydown', onDocumentKeydown);
-    messageElement.remove();
-  }
-
   messageElement.addEventListener('click', onMessageElementClick);
-  document.addEventListener('keydown', onDocumentKeydown);
+  // ✅ capture:true чтобы сработать раньше обработчика формы
+  document.addEventListener('keydown', onDocumentKeydown, true);
 };
 
 const showSuccess = () => {
@@ -41,4 +51,4 @@ const showSubmitError = () => {
   showMessage('#error', 'error', 'error__inner', 'error__button');
 };
 
-export { showSuccess, showSubmitError };
+export { showSuccess, showSubmitError, isMessageOpen };
