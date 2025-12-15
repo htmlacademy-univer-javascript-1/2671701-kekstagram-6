@@ -1,5 +1,5 @@
 import { renderPictures } from './pictures.js';
-import { initImageUpload } from './upload-form.js';
+import { uploadImage } from './upload-form.js';
 import { initScale } from './scale.js';
 import { initEffects } from './effects.js';
 import { validate } from './validate.js';
@@ -18,7 +18,7 @@ function init() {
     });
 
 
-  initImageUpload();
+  uploadImage();
   initScale();
   initEffects();
   validate();

@@ -95,3 +95,9 @@ commentsLoader.addEventListener('click', () => {
 });
 
 closeButton.addEventListener('click', closeBigPicture);
+
+bigPicture.addEventListener('click', (evt) => {
+  if (!evt.target.closest('.big-picture__preview')) {
+    closeBigPicture();
+  }
+});
