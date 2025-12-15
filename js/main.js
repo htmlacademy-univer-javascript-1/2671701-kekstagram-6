@@ -5,15 +5,18 @@ import { initEffects } from './effects.js';
 import { validate } from './validate.js';
 import { showLoadError } from './utils.js';
 import { getPhotos } from './api.js';
+import { getFilters } from './filters.js';
 
 function init() {
   getPhotos()
     .then((photos) => {
       renderPictures(photos);
+      getFilters(photos, renderPictures);
     })
     .catch((error) => {
-      showLoadError(`Ошибка загрузки данных: ${error.message}`);
+      showLoadError(`Не удалось загрузить данные: ${error.message}`);
     });
+
 
   initImageUpload();
   initScale();
