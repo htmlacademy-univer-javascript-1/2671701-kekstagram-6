@@ -32,7 +32,6 @@ const getPhotos = () => {
 
 const sendFormData = (formData) => {
   const baseUrl = getBaseUrl();
-  // ВАЖНО: тест ждёт POST на baseApiUrl + '/'
   return request('POST', `${baseUrl.replace(/\/$/, '')}/`, formData);
 };
 

@@ -49,16 +49,20 @@ const renderCommentChunk = (comments) => {
 };
 
 const updateCommentsCounter = () => {
-  const shownCountElement = commentsCounterElement.querySelector(SHOWN_COUNT_SELECTOR);
-  const totalCountElement = commentsCounterElement.querySelector(TOTAL_COUNT_SELECTOR);
+  let shownCountElement = commentsCounterElement.querySelector(SHOWN_COUNT_SELECTOR);
+  let totalCountElement = commentsCounterElement.querySelector(TOTAL_COUNT_SELECTOR);
 
-  if (shownCountElement && totalCountElement) {
-    shownCountElement.textContent = renderedCount;
-    totalCountElement.textContent = allComments.length;
-    return;
+  if (!shownCountElement || !totalCountElement) {
+    commentsCounterElement.innerHTML = `
+      <span class="social__comment-shown-count"></span> из
+      <span class="social__comment-total-count"></span> комментариев
+    `;
+    shownCountElement = commentsCounterElement.querySelector(SHOWN_COUNT_SELECTOR);
+    totalCountElement = commentsCounterElement.querySelector(TOTAL_COUNT_SELECTOR);
   }
 
-  commentsCounterElement.textContent = `${renderedCount} из ${allComments.length} комментариев`;
+  shownCountElement.textContent = renderedCount;
+  totalCountElement.textContent = allComments.length;
 };
 
 const updateLoaderVisibility = () => {

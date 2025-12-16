@@ -22,7 +22,6 @@ const showMessage = (templateId, rootClass, innerClass, buttonClass) => {
 
   function onDocumentKeydown (evt) {
     if (evt.key === ESC_KEY) {
-      // ✅ не даём событию дойти до обработчика Esc формы
       evt.preventDefault();
       evt.stopImmediatePropagation();
       closeMessage();
