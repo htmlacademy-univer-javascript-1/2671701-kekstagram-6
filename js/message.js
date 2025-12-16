@@ -1,41 +1,53 @@
+const ESC_KEY = 'Escape';
+
+let isOpen = false;
+
+const isMessageOpen = () => isOpen;
+
+const showMessage = (templateId, rootClass, innerClass, buttonClass) => {
+  const messageTemplateFragment = document
+    .querySelector(templateId)
+    .content
+    .cloneNode(true);
+
+  const messageElement = messageTemplateFragment.querySelector(`.${rootClass}`);
+  document.body.append(messageElement);
+  isOpen = true;
+
+  const closeMessage = () => {
+    document.removeEventListener('keydown', onDocumentKeydown, true);
+    messageElement.remove();
+    isOpen = false;
+  };
+
+  function onDocumentKeydown (evt) {
+    if (evt.key === ESC_KEY) {
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
+      closeMessage();
+    }
+  }
+
+  const onMessageElementClick = (evt) => {
+    const isClickOutsideInner = !evt.target.closest(`.${innerClass}`);
+    const isClickOnButton = Boolean(evt.target.closest(`.${buttonClass}`));
+
+    if (isClickOutsideInner || isClickOnButton) {
+      closeMessage();
+    }
+  };
+
+  messageElement.addEventListener('click', onMessageElementClick);
+  // ✅ capture:true чтобы сработать раньше обработчика формы
+  document.addEventListener('keydown', onDocumentKeydown, true);
+};
+
 const showSuccess = () => {
-  const template = document.querySelector('#success').content.cloneNode(true);
-  const successElement = template.querySelector('.success');
-  document.body.append(successElement);
-
-  const close = () => successElement.remove();
-
-  successElement.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.success__inner') || evt.target.closest('.success__button')) {
-      close();
-    }
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      close();
-    }
-  });
+  showMessage('#success', 'success', 'success__inner', 'success__button');
 };
 
 const showSubmitError = () => {
-  const template = document.querySelector('#error').content.cloneNode(true);
-  const errorElement = template.querySelector('.error');
-  document.body.append(errorElement);
-
-  const close = () => errorElement.remove();
-
-  errorElement.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.error__inner') || evt.target.closest('.error__button')) {
-      close();
-    }
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      close();
-    }
-  });
+  showMessage('#error', 'error', 'error__inner', 'error__button');
 };
 
-export { showSuccess, showSubmitError };
+export { showSuccess, showSubmitError, isMessageOpen };

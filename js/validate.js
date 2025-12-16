@@ -1,9 +1,14 @@
-function validate(imageUploadForm) {
-  const hashtagField = imageUploadForm.querySelector('.text__hashtags');
-  const commentField = imageUploadForm.querySelector('.text__description');
+const MAX_HASHTAGS = 5;
+const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
+const MAX_LENGTH = 140;
 
-  const hashtagReg = /^#[a-zа-яё0-9]{1,19}$/i;
-  const MAX_HASHTAGS = 5;
+const validate = (imageUploadForm) => {
+  if (!imageUploadForm) {
+    return null;
+  }
+
+  const hashtagFieldElement = imageUploadForm.querySelector('.text__hashtags');
+  const commentFieldElement = imageUploadForm.querySelector('.text__description');
 
   const pristine = new Pristine(imageUploadForm, {
     classTo: 'img-upload__field-wrapper',
@@ -11,56 +16,52 @@ function validate(imageUploadForm) {
     errorTextParent: 'img-upload__field-wrapper',
   });
 
-  function validateHashtags(hashtagsString) {
-    if (hashtagsString.trim() === '') {
-      return true;
+  const splitHashtags = (value) => {
+    const trimmed = value.trim();
+    if (trimmed === '') {
+      return [];
     }
+    return trimmed.split(/\s+/);
+  };
 
-    const hashtags = hashtagsString
-      .trim()
-      .split(/\s+/)
-      .filter((hashtag) => hashtag !== '');
+  const isValidHashtags = (value) =>
+    splitHashtags(value).every((tag) => HASHTAG_REGEXP.test(tag));
 
-    if (hashtags.length > MAX_HASHTAGS) {
-      return false;
-    }
+  const isValidCount = (value) =>
+    splitHashtags(value).length <= MAX_HASHTAGS;
 
-    const seenHashtags = new Set();
+  const isUniqueHashtags = (value) => {
+    const tags = splitHashtags(value).map((tag) => tag.toLowerCase());
+    return new Set(tags).size === tags.length;
+  };
 
-    for (const hashtag of hashtags) {
-      if (!hashtagReg.test(hashtag)) {
-        return false;
-      }
-
-      const lowerHashtag = hashtag.toLowerCase();
-
-      if (seenHashtags.has(lowerHashtag)) {
-        return false;
-      }
-
-      seenHashtags.add(lowerHashtag);
-    }
-
-    return true;
-  }
-
-  function validateComment(commentString) {
-    return commentString.length <= 140;
-  }
+  const isValidComment = (value) => value.length <= MAX_LENGTH;
 
   pristine.addValidator(
-    hashtagField,
-    validateHashtags,
-    'Некорректные хэштеги'
+    hashtagFieldElement,
+    isValidHashtags,
+    'Хэш-тег введён неверно'
   );
 
   pristine.addValidator(
-    commentField,
-    validateComment,
+    hashtagFieldElement,
+    isValidCount,
+    `Нельзя указать больше ${MAX_HASHTAGS} хэш-тегов`
+  );
+
+  pristine.addValidator(
+    hashtagFieldElement,
+    isUniqueHashtags,
+    'Хэш-теги повторяются'
+  );
+
+  pristine.addValidator(
+    commentFieldElement,
+    isValidComment,
     'Максимум 140 символов'
   );
 
   return pristine;
-}
+};
 
 export { validate };
